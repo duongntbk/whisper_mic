@@ -24,7 +24,7 @@ from whisper_mic.utils import get_logger
 # asound = cdll.LoadLibrary('libasound.so')
 # asound.snd_lib_error_set_handler(c_error_handler)
 class WhisperMic:
-    def __init__(self,model="base",device=("cuda" if torch.cuda.is_available() else "cpu"),english=False,verbose=False,energy=300,pause=2,dynamic_energy=False,save_file=False, model_root="~/.cache/whisper",mic_index=None,implementation="whisper",hallucinate_threshold=300):
+    def __init__(self,model="base",device=("cuda" if torch.cuda.is_available() else "cpu"),english=False,verbose=False,energy=300,pause=2,dynamic_energy=False,save_file=False, model_root="~/.cache/whisper",mic_index=None,implementation="whisper",hallucinate_threshold=300,no_keyboard=False):
 
         self.logger = get_logger("whisper_mic", "info")
         self.energy = energy
@@ -34,7 +34,9 @@ class WhisperMic:
         self.save_file = save_file
         self.verbose = verbose
         self.english = english
-        self.keyboard = pynput.keyboard.Controller()
+
+        if not no_keyboard:
+            self.keyboard = pynput.keyboard.Controller()
 
         self.platform = platform.system().lower()
         if self.platform == "darwin":
